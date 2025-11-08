@@ -1,6 +1,12 @@
 "use client"
 
 import { useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { cn } from "@/lib/utils"
 
 export default function CourseForm({ onCourseGenerated, onCancel }) {
   const [formData, setFormData] = useState({
@@ -70,130 +76,145 @@ export default function CourseForm({ onCourseGenerated, onCancel }) {
   }
 
   return (
-    <div className="bg-white rounded-xl p-6 max-w-2xl mx-auto border border-gray-200 shadow-lg">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h2 className="text-2xl font-semibold text-gray-900 mb-2 font-khula">Create New Course</h2>
-          <p className="text-gray-600 font-khula">Generate a personalized learning course with AI</p>
-        </div>
-        {onCancel && (
-          <button
-            onClick={onCancel}
-            className="text-gray-500 hover:text-gray-700 p-2 rounded-lg hover:bg-gray-100 transition-colors duration-300"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        )}
-      </div>
-      
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Topic Input */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2 font-khula">
-            Course Topic *
-          </label>
-          <input
-            type="text"
-            value={formData.topic}
-            onChange={(e) => setFormData(prev => ({ ...prev, topic: e.target.value }))}
-            placeholder="e.g., Machine Learning Basics, Advanced React Patterns, Python for Data Science..."
-            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all font-khula"
-            required
-          />
-        </div>
-
-        {/* Duration and Level */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <Card className="w-full mx-auto border border-gray-200 shadow-lg">
+      <CardHeader className="pb-4">
+        <div className="flex justify-between items-center">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 font-khula">
-              Estimated Duration
-            </label>
-            <select
-              value={formData.duration}
-              onChange={(e) => setFormData(prev => ({ ...prev, duration: e.target.value }))}
-              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none font-khula"
-            >
-              <option value="" className="bg-white">Select duration</option>
-              <option value="1-2 weeks" className="bg-white">1-2 weeks</option>
-              <option value="3-4 weeks" className="bg-white">3-4 weeks</option>
-              <option value="1-2 months" className="bg-white">1-2 months</option>
-              <option value="3+ months" className="bg-white">3+ months</option>
-            </select>
+            <CardTitle className="text-2xl font-semibold text-gray-900 mb-2">
+              Create New Course
+            </CardTitle>
+            <p className="text-gray-600">Generate a personalized learning course with AI</p>
           </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 font-khula">
-              Difficulty Level
-            </label>
-            <select
-              value={formData.level}
-              onChange={(e) => setFormData(prev => ({ ...prev, level: e.target.value }))}
-              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none font-khula"
-            >
-              <option value="beginner" className="bg-white">Beginner</option>
-              <option value="intermediate" className="bg-white">Intermediate</option>
-              <option value="advanced" className="bg-white">Advanced</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Focus Areas */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2 font-khula">
-            Focus Areas (Optional)
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {focusOptions.map((area) => (
-              <button
-                key={area}
-                type="button"
-                onClick={() => toggleFocusArea(area)}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all font-khula ${
-                  formData.focusAreas.includes(area)
-                    ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md'
-                    : 'bg-white text-gray-700 hover:text-gray-900 border border-gray-300 hover:border-orange-500 hover:bg-orange-50'
-                }`}
-              >
-                {area}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Submit and Cancel Buttons */}
-        <div className="flex space-x-4">
           {onCancel && (
-            <button
-              type="button"
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={onCancel}
-              className="flex-1 px-6 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg font-semibold font-khula hover:border-orange-500 hover:bg-orange-50 transition-all duration-300"
+              className="text-gray-500 hover:text-gray-700 hover:bg-gray-100"
             >
-              Cancel
-            </button>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </Button>
           )}
-          <button
-            type="submit"
-            disabled={isLoading || !formData.topic.trim()}
-            className={`${onCancel ? 'flex-1' : 'w-full'} bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 rounded-lg font-semibold font-khula disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 hover:shadow-lg transition-all duration-300`}
-          >
-            {isLoading ? (
-              <>
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span>Generating Course...</span>
-              </>
-            ) : (
-              <>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                <span>Generate Course</span>
-              </>
-            )}
-          </button>
         </div>
-      </form>
-    </div>
+      </CardHeader>
+      
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Topic Input */}
+          <div className="space-y-2">
+            <Label htmlFor="topic" className="text-sm font-medium text-gray-700">
+              Course Topic *
+            </Label>
+            <Input
+              id="topic"
+              type="text"
+              value={formData.topic}
+              onChange={(e) => setFormData(prev => ({ ...prev, topic: e.target.value }))}
+              placeholder="e.g., Machine Learning Basics, Advanced React Patterns, Python for Data Science..."
+              className="w-full"
+              required
+            />
+          </div>
+
+          {/* Duration and Level */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="duration" className="text-sm font-medium text-gray-700">
+                Estimated Duration
+              </Label>
+              <Select value={formData.duration} onValueChange={(value) => setFormData(prev => ({ ...prev, duration: value }))}>
+                <SelectTrigger id="duration">
+                  <SelectValue placeholder="Select duration" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1-2 weeks">1-2 weeks</SelectItem>
+                  <SelectItem value="3-4 weeks">3-4 weeks</SelectItem>
+                  <SelectItem value="1-2 months">1-2 months</SelectItem>
+                  <SelectItem value="3+ months">3+ months</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="level" className="text-sm font-medium text-gray-700">
+                Difficulty Level
+              </Label>
+              <Select value={formData.level} onValueChange={(value) => setFormData(prev => ({ ...prev, level: value }))}>
+                <SelectTrigger id="level">
+                  <SelectValue placeholder="Select level" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="beginner">Beginner</SelectItem>
+                  <SelectItem value="intermediate">Intermediate</SelectItem>
+                  <SelectItem value="advanced">Advanced</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Focus Areas */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-gray-700">
+              Focus Areas (Optional)
+            </Label>
+            <div className="flex flex-wrap gap-2">
+              {focusOptions.map((area) => (
+                <Button
+                  key={area}
+                  type="button"
+                  variant={formData.focusAreas.includes(area) ? "default" : "outline"}
+                  onClick={() => toggleFocusArea(area)}
+                  className={cn(
+                    "px-3 py-2 rounded-lg text-sm font-medium transition-all",
+                    formData.focusAreas.includes(area) &&
+                      "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md border-orange-500"
+                  )}
+                >
+                  {area}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          {/* Submit and Cancel Buttons */}
+          <div className="flex space-x-4">
+            {onCancel && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onCancel}
+                className="flex-1 px-6 py-3 border-gray-300 text-gray-700 hover:border-orange-500 hover:bg-orange-50"
+              >
+                Cancel
+              </Button>
+            )}
+            <Button
+              type="submit"
+              disabled={isLoading || !formData.topic.trim()}
+              className={cn(
+                onCancel ? "flex-1" : "w-full",
+                "bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 hover:shadow-lg transition-all duration-300"
+              )}
+            >
+              {isLoading ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <span>Generating Course...</span>
+                </>
+              ) : (
+                <>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  <span>Generate Course</span>
+                </>
+              )}
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   )
 }
